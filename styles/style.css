@@ -1,0 +1,127 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f5f5f5;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item {
+  width: 30%;
+  margin-bottom: 20px;
+}
+
+.item img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.item h3 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.item select {
+  margin-top: 5px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f5f5f5;
+}
+
+#total-price {
+  font-weight: bold;
+}
+
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+.count-value {
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+.minus-button,
+.plus-button {
+  background-color: #ccc;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.minus-button:hover,
+.plus-button:hover {
+  background-color: #aaa;
+}
+
+.minus-button:active,
+.plus-button:active {
+  background-color: #444;
+}
