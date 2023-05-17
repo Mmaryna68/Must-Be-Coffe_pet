@@ -1,4 +1,4 @@
-const breakfastSelect = document.querySelector('select[name="breakfast"]');
+/*const breakfastSelect = document.querySelector('select[name="breakfast"]');
 const lunchSelect = document.querySelector('select[name="lunch"]');
 const dinnerSelect = document.querySelector('select[name="dinner"]');
 const cart = document.querySelector("#cart");
@@ -56,7 +56,7 @@ function addItemToCart(name, count, price) {
   countCell.appendChild(countValue);
   countCell.appendChild(plusButton);
 
-  /*// добавляем обработчики клика на кнопки "+" и "-"
+  /* // добавляем обработчики клика на кнопки "+" и "-"
     plusButton.addEventListener("click", () => {
       countCell.innerHTML = parseInt(countCell.innerHTML) + 1;
       updateCart();
@@ -78,10 +78,10 @@ function addItemToCart(name, count, price) {
     row.appendChild(nameCell);
     row.appendChild(countCell); */
 
-  const priceCell = document.createElement("td");
-  priceCell.innerHTML = `£${price}` * count;
-  // устанавливаем цену в соответствии с выбранным блюдом
-  /* if (name === "Яичница с беконом") {
+/*const priceCell = document.createElement("td");
+  priceCell.innerHTML = `£${price}` * count; */
+// устанавливаем цену в соответствии с выбранным блюдом
+/* if (name === "Яичница с беконом") {
       priceCell.innerHTML = 15;
     } else if (name === "Овсянка с фруктами") {
       priceCell.innerHTML = 10;
@@ -103,7 +103,7 @@ function addItemToCart(name, count, price) {
     row.appendChild(priceCell);
   } */
 
-  const deleteCell = document.createElement("td");
+/*const deleteCell = document.createElement("td");
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = "Удалить";
   deleteButton.addEventListener("click", () => {
@@ -169,4 +169,4 @@ function updateCart() {
     }
   }
   totalPrice.innerHTML = total;
-}
+}*/

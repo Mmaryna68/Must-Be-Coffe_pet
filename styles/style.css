@@ -6,6 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
+  background-color: rgb(154, 195, 195);
 }
 
 .container {
@@ -51,6 +52,24 @@ select {
 .item {
   width: 30%;
   margin-bottom: 20px;
+}
+.item__counter {
+  width: 100%;
+  min-height: 30px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item__button {
+  width: 15px;
+  min-height: 20px;
+}
+
+.item__number {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .item img {
@@ -124,4 +143,38 @@ input[type="submit"]:hover {
 .minus-button:active,
 .plus-button:active {
   background-color: #444;
+}
+
+.delete-button {
+  background-color: #ff0000; /* установка цвета фона */
+  color: #fff; /* установка цвета текста */
+  border: none; /* убираем рамку */
+  padding: 8px 12px; /* установка внутренних отступов */
+  border-radius: 50%; /* установка радиуса скругления */
+  cursor: pointer; /* установка вида курсора */
+}
+
+/* добавление иконки мусорного ведра */
+.delete-button::before {
+  content: "\f1f8"; /* код иконки из шрифта Font Awesome */
+  font-family: "Font Awesome 5 Free"; /* указываем название шрифта */
+  font-weight: 400; /* указываем толщину шрифта */
+  font-size: 16px; /* указываем размер шрифта */
+  margin-right: 8px; /* устанавливаем отступ между иконкой и текстом */
+}
+
+.cart-icon-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+}
+
+.fa-trash {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fa-trash.cart-has-items {
+  color: red;
 }
