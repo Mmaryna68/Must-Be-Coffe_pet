@@ -1,172 +1,202 @@
-/*const breakfastSelect = document.querySelector('select[name="breakfast"]');
+const breakfastSelect = document.querySelector('select[name="breakfast"]');
 const lunchSelect = document.querySelector('select[name="lunch"]');
 const dinnerSelect = document.querySelector('select[name="dinner"]');
 const cart = document.querySelector("#cart");
 const totalPrice = document.querySelector("#total-price");
+const table = document.querySelector(".table");
 
-let breakfastCount = 0;
-let lunchCount = 0;
-let dinnerCount = 0;
 let cartItems = [];
 
 breakfastSelect.addEventListener("change", () => {
-  breakfastCount = parseInt(breakfastSelect.value);
-  updateCart();
+  updateCart(breakfastSelect, "Завтрак");
 });
 
 lunchSelect.addEventListener("change", () => {
-  lunchCount = parseInt(lunchSelect.value);
-  updateCart();
+  updateCart(lunchSelect, "Обед");
 });
 
 dinnerSelect.addEventListener("change", () => {
-  dinnerCount = parseInt(dinnerSelect.value);
-  updateCart();
+  updateCart(dinnerSelect, "Ужин");
 });
 
-function addItemToCart(name, count, price) {
-  const row = document.createElement("tr");
-  const nameCell = document.createElement("td");
-  nameCell.innerHTML = name;
+function updateCart(select, category) {
+  const selectedOption = select.options[select.selectedIndex];
+  const name = selectedOption.text;
+  const price = parseInt(selectedOption.value);
+  const amount = 1;
 
-  const countCell = document.createElement("td");
-  const countValue = document.createElement("span");
-  countValue.innerHTML = count;
-  countValue.classList.add("count-value");
-  // создаем кнопки "+" и "-" для увеличения и уменьшения количества выбранных блюд
-  const minusButton = document.createElement("button");
-  minusButton.innerHTML = "-";
-  minusButton.classList.add("minus-button");
-  minusButton.addEventListener("click", () => {
-    if (count > 0) {
-      count--;
-      countValue.innerHTML = count;
-      updateCart();
-    }
-  });
-  const plusButton = document.createElement("button");
-  plusButton.innerHTML = "+";
-  plusButton.classList.add("plus-button");
-  plusButton.addEventListener("click", () => {
-    count++;
-    countValue.innerHTML = count;
-    updateCart();
-  });
-  countCell.appendChild(minusButton);
-  countCell.appendChild(countValue);
-  countCell.appendChild(plusButton);
+  let itemAlreadyInCart = false;
+  let itemIndex = -1;
 
-  /* // добавляем обработчики клика на кнопки "+" и "-"
-    plusButton.addEventListener("click", () => {
-      countCell.innerHTML = parseInt(countCell.innerHTML) + 1;
-      updateCart();
-    });
-    minusButton.addEventListener("click", () => {
-      // количество выбранных блюд не может быть отрицательным
-      if (parseInt(countCell.innerHTML) > 0) {
-        countCell.innerHTML = parseInt(countCell.innerHTML) - 1;
-        updateCart();
-      }
-    });
-    // добавляем кнопки "+" и "-" в ячейку "countCell"
-    countCell.appendChild(plusButton);
-    countCell.appendChild(document.createTextNode(" "));
-    countCell.appendChild(minusButton);
-    // устанавливаем количество выбранных блюд
-    countCell.appendChild(document.createElement("br"));
-    countCell.appendChild(document.createTextNode(count));
-    row.appendChild(nameCell);
-    row.appendChild(countCell); */
-
-/*const priceCell = document.createElement("td");
-  priceCell.innerHTML = `£${price}` * count; */
-// устанавливаем цену в соответствии с выбранным блюдом
-/* if (name === "Яичница с беконом") {
-      priceCell.innerHTML = 15;
-    } else if (name === "Овсянка с фруктами") {
-      priceCell.innerHTML = 10;
-    } else if (name === "Сэндвич с сыром и овощами") {
-      priceCell.innerHTML = 12;
-    } else if (name === "Салат с курицей и авокадо") {
-      priceCell.innerHTML = 20;
-    } else if (name === "Спагетти с мясным соусом") {
-      priceCell.innerHTML = 25;
-    } else if (name === "Суп из овощей") {
-      priceCell.innerHTML = 15;
-    } else if (name === "Стейк с картошкой и овощами") {
-      priceCell.innerHTML = 30;
-    } else if (name === "Куриное филе с рисом и овощами") {
-      priceCell.innerHTML = 25;
-    } else if (name === "Салат с морепродуктами") {
-      priceCell.innerHTML = 20;
-    }
-    row.appendChild(priceCell);
-  } */
-
-/*const deleteCell = document.createElement("td");
-  const deleteButton = document.createElement("button");
-  deleteButton.innerHTML = "Удалить";
-  deleteButton.addEventListener("click", () => {
-    const index = cartItems.findIndex((item) => item.name === name);
-    if (index !== -1) {
-      cartItems.splice(index, 1);
-      updateCart();
-    }
-  });
-  deleteCell.appendChild(deleteButton);
-
-  row.appendChild(nameCell);
-  row.appendChild(countCell);
-  row.appendChild(priceCell);
-  row.appendChild(deleteCell);
-  cart.appendChild(row);
-
-  cartItems.push({ name, count, price });
-  updateCart();
-}
-
-function removeItem(name) {
-  cartItems = cartItems.filter((item) => item.name !== name);
-  updateCart();
-}
-
-function updateCart() {
-  const counts = [breakfastCount, lunchCount, dinnerCount];
-  let total = 0;
-  for (let i = 0; i < counts.length; i++) {
-    if (counts[i] > 0) {
-      const select = [breakfastSelect, lunchSelect, dinnerSelect][i];
-      const name = select.options[select.selectedIndex].text;
-      const price = parseInt(select.value);
-      const amount = counts[i];
-
-      let itemAlreadyInCart = false;
-      const cartRows = cart.getElementsByTagName("tr");
-      for (let j = 0; j < cartRows.length; j++) {
-        const cells = cartRows[j].getElementsByTagName("td");
-        if (cells.length > 0 && cells[0].innerHTML === name) {
-          cells[1].innerHTML = parseInt(cells[1].innerHTML) + amount;
-          itemAlreadyInCart = true;
-          break;
-        }
-      }
-
-      if (!itemAlreadyInCart) {
-        const row = document.createElement("tr");
-        const nameCell = document.createElement("td");
-        const amountCell = document.createElement("td");
-        const priceCell = document.createElement("td");
-        nameCell.innerHTML = name;
-        amountCell.innerHTML = amount;
-        priceCell.innerHTML = price;
-        row.appendChild(nameCell);
-        row.appendChild(amountCell);
-        row.appendChild(priceCell);
-        cart.appendChild(row);
-      }
-
-      total += price * amount;
+  for (let i = 0; i < cartItems.length; i++) {
+    if (cartItems[i].name === name) {
+      itemAlreadyInCart = true;
+      itemIndex = i;
+      break;
     }
   }
-  totalPrice.innerHTML = total;
-}*/
+
+  if (itemAlreadyInCart) {
+    cartItems[itemIndex].amount += amount;
+  } else {
+    cartItems.push({
+      name: name,
+      amount: amount,
+      price: price,
+    });
+  }
+
+  renderCart();
+}
+
+function renderCart() {
+  cart.innerHTML = "";
+
+  let totalPriceValue = 0;
+
+  for (let i = 0; i < cartItems.length; i++) {
+    const item = cartItems[i];
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("td");
+    const amountCell = document.createElement("td");
+    const priceCell = document.createElement("td");
+    const deleteCell = document.createElement("td");
+    const deleteIcon = document.createElement("i");
+
+    deleteIcon.classList.add("fas", "fa-trash");
+    deleteIcon.setAttribute("type", "icon");
+    deleteIcon.innerHTML = "";
+
+    nameCell.innerHTML = item.name;
+
+    const amountCellContainer = document.createElement("div");
+    amountCellContainer.className = "item__counter";
+
+    const minusButton = document.createElement("button");
+    minusButton.type = "button";
+    minusButton.className = "item__button minus-button";
+    minusButton.textContent = "-";
+    amountCellContainer.appendChild(minusButton);
+
+    const itemNumber = document.createElement("span");
+    itemNumber.className = "item__number";
+    itemNumber.textContent = item.amount;
+    amountCellContainer.appendChild(itemNumber);
+
+    const plusButton = document.createElement("button");
+    plusButton.type = "button";
+    plusButton.className = "item__button plus-button";
+    plusButton.textContent = "+";
+    amountCellContainer.appendChild(plusButton);
+
+    minusButton.addEventListener("click", function () {
+      const row = this.parentNode.parentNode;
+      const itemName = row.querySelector("td:first-child").textContent;
+      updateCartItem(itemName, -1);
+    });
+
+    plusButton.addEventListener("click", function () {
+      const row = this.parentNode.parentNode;
+      const itemName = row.querySelector("td:first-child").textContent;
+      updateCartItem(itemName, 1);
+    });
+
+    amountCell.appendChild(amountCellContainer);
+    priceCell.innerHTML = item.price;
+
+    deleteIcon.addEventListener("click", function () {
+      cartItems.splice(i, 1);
+      renderCart(); // Обновить корзину после удаления строки
+    });
+
+    row.appendChild(nameCell);
+    row.appendChild(amountCell);
+    row.appendChild(priceCell);
+    row.appendChild(deleteCell);
+    deleteCell.appendChild(deleteIcon);
+    cart.appendChild(row);
+
+    totalPriceValue += item.price * item.amount;
+  }
+
+  totalPrice.textContent = totalPriceValue;
+  renderTotalPrice();
+}
+function updateTotalPrice() {
+  let totalPriceValue = 0;
+  const priceCells = document.querySelectorAll(".table td:nth-child(3)");
+
+  for (let i = 0; i < cartItems.length; i++) {
+    const item = cartItems[i];
+    totalPriceValue += item.price * item.amount;
+  }
+
+  totalPriceCell.textContent = totalPriceValue;
+}
+table.addEventListener("click", (event) => {
+  if (event.target.classList.contains("item__button")) {
+    const itemNumber = event.target.parentNode.querySelector(".item__number");
+    const count = parseInt(itemNumber.textContent);
+    const row = event.target.closest("tr");
+    const priceCell = row.querySelector("td:nth-child(3)");
+    let price = parseInt(priceCell.textContent);
+
+    if (event.target.classList.contains("plus-button")) {
+      itemNumber.textContent = count + 1;
+      cartItems[itemIndex].price += price; // Увеличить цену
+      priceCell.textContent = price;
+      updateCartItem(event.target.parentNode.parentNode);
+    } else if (event.target.classList.contains("minus-button")) {
+      if (count > 0) {
+        itemNumber.textContent = count - 1;
+        cartItems[itemIndex].price -= price; // Уменьшить цену
+        priceCell.textContent = price;
+        updateCartItem(event.target.parentNode.parentNode);
+      }
+    }
+    updateTotalPrice();
+  } else if (event.target.classList.contains("fas", "fa-trash")) {
+    const row = event.target.parentNode.parentNode.parentNode;
+    const name = row.cells[0].textContent;
+    const itemIndex = cartItems.findIndex((item) => item.name === name);
+
+    if (itemIndex !== -1) {
+      cartItems.splice(itemIndex, 1);
+      renderCart();
+    }
+    updateTotalPrice();
+  }
+});
+
+function updateCartItem(row) {
+  const name = row.cells[0].textContent;
+  const amount = parseInt(row.querySelector(".item__number").textContent);
+  const price = parseInt(row.cells[2].textContent);
+  const itemIndex = cartItems.findIndex((item) => item.name === name);
+
+  if (itemIndex !== -1) {
+    cartItems[itemIndex].amount = amount;
+    cartItems[itemIndex].price = price * amount; // Обновить цену
+  }
+
+  renderCart();
+  renderTotalPrice();
+}
+
+function renderTotalPrice() {
+  const totalRow = document.createElement("tr");
+  const totalLabelCell = document.createElement("td");
+  const totalAmountCell = document.createElement("td");
+  const totalPriceCell = document.createElement("td");
+
+  totalLabelCell.textContent = "Итого";
+  totalLabelCell.colSpan = 1;
+  totalAmountCell.textContent = "";
+  totalPriceCell.textContent = totalPrice.textContent;
+
+  totalRow.appendChild(totalLabelCell);
+  totalRow.appendChild(totalAmountCell);
+  totalRow.appendChild(totalPriceCell);
+
+  cart.appendChild(totalRow);
+}
