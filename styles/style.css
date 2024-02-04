@@ -102,7 +102,7 @@ th {
   background-color: #f5f5f5;
 }
 
-#total-price {
+#total-price-cell {
   font-weight: bold;
 }
 
@@ -177,4 +177,9 @@ input[type="submit"]:hover {
 
 .fa-trash.cart-has-items {
   color: red;
+}
+
+.total-price-cell {
+  display: flex;
+  justify-content: center;
 }

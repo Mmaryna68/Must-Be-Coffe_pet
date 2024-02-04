@@ -2,7 +2,7 @@ const breakfastSelect = document.querySelector('select[name="breakfast"]');
 const lunchSelect = document.querySelector('select[name="lunch"]');
 const dinnerSelect = document.querySelector('select[name="dinner"]');
 const cart = document.querySelector("#cart");
-const totalPrice = document.querySelector("#total-price");
+const totalPriceCell = document.getElementById("total-price-cell");
 const table = document.querySelector(".table");
 
 let cartItems = [];
@@ -89,18 +89,6 @@ function renderCart() {
     plusButton.textContent = "+";
     amountCellContainer.appendChild(plusButton);
 
-    minusButton.addEventListener("click", function () {
-      const row = this.parentNode.parentNode;
-      const itemName = row.querySelector("td:first-child").textContent;
-      updateCartItem(itemName, -1);
-    });
-
-    plusButton.addEventListener("click", function () {
-      const row = this.parentNode.parentNode;
-      const itemName = row.querySelector("td:first-child").textContent;
-      updateCartItem(itemName, 1);
-    });
-
     amountCell.appendChild(amountCellContainer);
     priceCell.innerHTML = item.price;
 
@@ -119,12 +107,11 @@ function renderCart() {
     totalPriceValue += item.price * item.amount;
   }
 
-  totalPrice.textContent = totalPriceValue;
+  totalPriceCell.textContent = totalPriceValue;
   renderTotalPrice();
 }
 function updateTotalPrice() {
   let totalPriceValue = 0;
-  const priceCells = document.querySelectorAll(".table td:nth-child(3)");
 
   for (let i = 0; i < cartItems.length; i++) {
     const item = cartItems[i];
@@ -143,17 +130,18 @@ table.addEventListener("click", (event) => {
 
     if (event.target.classList.contains("plus-button")) {
       itemNumber.textContent = count + 1;
-      cartItems[itemIndex].price += price; // Увеличить цену
-      priceCell.textContent = price;
+      cartItems[itemIndex].price += cartItems[itemIndex].price / count; // Увеличить цену
+      priceCell.textContent = cartItems[itemIndex].price;
       updateCartItem(event.target.parentNode.parentNode);
     } else if (event.target.classList.contains("minus-button")) {
       if (count > 0) {
         itemNumber.textContent = count - 1;
-        cartItems[itemIndex].price -= price; // Уменьшить цену
-        priceCell.textContent = price;
+        cartItems[itemIndex].price -= cartItems[itemIndex].price / count; // Уменьшить цену
+        priceCell.textContent = cartItems[itemIndex].price;
         updateCartItem(event.target.parentNode.parentNode);
       }
     }
+    
     updateTotalPrice();
   } else if (event.target.classList.contains("fas", "fa-trash")) {
     const row = event.target.parentNode.parentNode.parentNode;
@@ -187,16 +175,15 @@ function renderTotalPrice() {
   const totalRow = document.createElement("tr");
   const totalLabelCell = document.createElement("td");
   const totalAmountCell = document.createElement("td");
-  const totalPriceCell = document.createElement("td");
 
   totalLabelCell.textContent = "Итого";
   totalLabelCell.colSpan = 1;
   totalAmountCell.textContent = "";
-  totalPriceCell.textContent = totalPrice.textContent;
+  totalAmountCell.appendChild(totalPriceCell);
 
   totalRow.appendChild(totalLabelCell);
   totalRow.appendChild(totalAmountCell);
-  totalRow.appendChild(totalPriceCell);
 
   cart.appendChild(totalRow);
 }
+
