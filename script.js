@@ -8,18 +8,18 @@ const table = document.querySelector(".table");
 let cartItems = [];
 
 breakfastSelect.addEventListener("change", () => {
-  updateCart(breakfastSelect, "Завтрак");
+  updateCart(breakfastSelect, "Завтрак", breakfastSelect.selectedIndex);
 });
 
 lunchSelect.addEventListener("change", () => {
-  updateCart(lunchSelect, "Обед");
+  updateCart(lunchSelect, "Обед", lunchSelect.selectedIndex);
 });
 
 dinnerSelect.addEventListener("change", () => {
-  updateCart(dinnerSelect, "Ужин");
+  updateCart(dinnerSelect, "Ужин", dinnerSelect.selectedIndex);
 });
 
-function updateCart(select, category) {
+function updateCart(select, category, index) {
   const selectedOption = select.options[select.selectedIndex];
   const name = selectedOption.text;
   const price = parseInt(selectedOption.value);
@@ -43,6 +43,7 @@ function updateCart(select, category) {
       name: name,
       amount: amount,
       price: price,
+      index: index // Сохраняем индекс выбранного элемента
     });
   }
 
@@ -110,66 +111,61 @@ function renderCart() {
   totalPriceCell.textContent = totalPriceValue;
   renderTotalPrice();
 }
+
 function updateTotalPrice() {
   let totalPriceValue = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
     const item = cartItems[i];
-    totalPriceValue += item.price * item.amount;
+    const index = item.index; // Получаем индекс элемента
+    const count = cartItems[i].amount;
+    totalPriceValue += count * parseInt(select.options[index].value); // Умножаем количество на цену по индексу
   }
 
   totalPriceCell.textContent = totalPriceValue;
 }
+
 table.addEventListener("click", (event) => {
   if (event.target.classList.contains("item__button")) {
     const itemNumber = event.target.parentNode.querySelector(".item__number");
     const count = parseInt(itemNumber.textContent);
     const row = event.target.closest("tr");
-    const priceCell = row.querySelector("td:nth-child(3)");
-    let price = parseInt(priceCell.textContent);
+    const name = row.cells[0].textContent;
+    const itemIndex = cartItems.findIndex((item) => item.name === name);
 
     if (event.target.classList.contains("plus-button")) {
       itemNumber.textContent = count + 1;
-      cartItems[itemIndex].price += cartItems[itemIndex].price / count; // Увеличить цену
-      priceCell.textContent = cartItems[itemIndex].price;
-      updateCartItem(event.target.parentNode.parentNode);
+      cartItems[itemIndex].amount += 1; // Увеличить количество товара в корзине
+      const priceDifference = cartItems[itemIndex].price / (count + 1); // Вычислить разницу в цене для одного товара
+      totalPriceCell.textContent = parseInt(totalPriceCell.textContent) + priceDifference; // Обновить итоговую сумму
     } else if (event.target.classList.contains("minus-button")) {
       if (count > 0) {
         itemNumber.textContent = count - 1;
-        cartItems[itemIndex].price -= cartItems[itemIndex].price / count; // Уменьшить цену
-        priceCell.textContent = cartItems[itemIndex].price;
-        updateCartItem(event.target.parentNode.parentNode);
+        cartItems[itemIndex].amount -= 1; // Уменьшить количество товара в корзине
+        const priceDifference = cartItems[itemIndex].price / (count - 1); // Вычислить разницу в цене для одного товара
+        totalPriceCell.textContent = parseInt(totalPriceCell.textContent) - priceDifference; // Обновить итоговую сумму
       }
     }
-    
-    updateTotalPrice();
+
+    renderCart(); // Обновить содержимое корзины
   } else if (event.target.classList.contains("fas", "fa-trash")) {
     const row = event.target.parentNode.parentNode.parentNode;
     const name = row.cells[0].textContent;
     const itemIndex = cartItems.findIndex((item) => item.name === name);
 
     if (itemIndex !== -1) {
+      const removedPrice = cartItems[itemIndex].price * cartItems[itemIndex].amount; // Получить цену удаляемого товара
       cartItems.splice(itemIndex, 1);
       renderCart();
+      totalPriceCell.textContent = parseInt(totalPriceCell.textContent) - removedPrice; // Обновить итоговую сумму
     }
-    updateTotalPrice();
+    updateTotalPrice(); // Обновить общую сумму заказа
   }
 });
 
-function updateCartItem(row) {
-  const name = row.cells[0].textContent;
-  const amount = parseInt(row.querySelector(".item__number").textContent);
-  const price = parseInt(row.cells[2].textContent);
-  const itemIndex = cartItems.findIndex((item) => item.name === name);
 
-  if (itemIndex !== -1) {
-    cartItems[itemIndex].amount = amount;
-    cartItems[itemIndex].price = price * amount; // Обновить цену
-  }
+    
 
-  renderCart();
-  renderTotalPrice();
-}
 
 function renderTotalPrice() {
   const totalRow = document.createElement("tr");
@@ -178,12 +174,12 @@ function renderTotalPrice() {
 
   totalLabelCell.textContent = "Итого";
   totalLabelCell.colSpan = 1;
-  totalAmountCell.textContent = "";
-  totalAmountCell.appendChild(totalPriceCell);
+  totalAmountCell.textContent = totalPriceCell.textContent; // Отображаем общую сумму заказа
 
   totalRow.appendChild(totalLabelCell);
   totalRow.appendChild(totalAmountCell);
 
   cart.appendChild(totalRow);
 }
+
 
